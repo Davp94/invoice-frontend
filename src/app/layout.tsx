@@ -2,9 +2,10 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import 'primeflex/primeflex.css';
-import 'primeicons/primeicons.css';
-import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
+import 'primereact/resources/primereact.min.css';
+import "primeflex/primeflex.css";
+import "primeicons/primeicons.css";
+import { PrimeReactProvider } from "primereact/api";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +20,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <PrimeReactProvider>
-      <body className={inter.className}>{children}</body>
-      </PrimeReactProvider>
+    <html lang="en"
+    suppressHydrationWarning>
+      <body className={inter.className}>
+        <PrimeReactProvider>{children}</PrimeReactProvider>
+      </body>
     </html>
   );
 }

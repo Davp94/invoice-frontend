@@ -1,25 +1,12 @@
 'use client';
 import ComponentUseMemo from '@/components/component-use-memo';
 import MyComponent from '@/components/my-component';
+import { initialState, reducer } from '@/state-management/reducer';
 import { count } from 'console';
 import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 
-const initialState = {counter: 0};
-
-function reducer (state, action) {
-    console.log("🚀 ~ reducer ~ action:", action)
-    console.log("🚀 ~ reducer ~ state:", state)
-    switch (action.type) {
-        case 'increment':
-            return { counter: state.counter + 1};
-        case 'decrement':
-            return { counter: state.counter - 1};
-        default:
-            throw new Error('Operaciòn no permitida');
-    }
-}
 
 export default function Hooks2Page() {
   //const hookTitle = 'WELCOME HOOKS PAGE';

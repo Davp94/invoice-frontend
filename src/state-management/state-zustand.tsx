@@ -1,13 +1,28 @@
 import { create } from "zustand";
 
 
-const useStore = create((set) => ({
-    user: {name: 'user1', email: 'test@test.com'},
-    setUser: () => set((state)=> ({user: state.email = 'testUpdated@test.com'})),
-    setUserEmail: (email: string) => set((state)=> ({user: state.email = email}))
+export interface User {
+    id:  number;
+    name: string;
+    email: string;
+}
+
+interface UserStore {
+    user: User,
+    setUser: (payload: User) => void;
+    removeUser: () => void;
+}
+
+const initialState: User = {
+    id: 0,
+    name: '',
+    email: 'email@email.com'
+}
+
+const useUserStore = create<UserStore>((set) => ({
+    user: initialState,
+    setUser: (payload: User) => set((state) => ({...state, user: payload})),
+    removeUser: () => set({user: initialState})
 }))
 
-function UserData() {
-    const user = useStore((state) => state.user)
-    return user;
-}
+export default useUserStore;

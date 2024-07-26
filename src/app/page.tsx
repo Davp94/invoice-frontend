@@ -1,4 +1,5 @@
 import MyComponent from "@/components/my-component";
+import axios from "axios";
 import { Button } from "primereact/button";
 
 export default function Home() {

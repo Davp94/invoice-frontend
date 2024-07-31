@@ -37,23 +37,24 @@ const TableCategoryComponent = ({ }) => {
     const [globalFilter, setGlobalFilter] = useState<string>('');
     const toast = useRef<Toast>(null);
     const initComponent = async () => {
-      //const response = await findAllCategories();
-      setCategories([{
-        id: 1,
-        name: 'category 1',
-        description: 'desc category 1'
-      },
-      {
-        id: 2,
-        name: 'category 2',
-        description: 'desc category 2'
-      },
-      {
-        id: 3,
-        name: 'category 3',
-        description: 'desc category 3'
-      },
-    ]);
+      const response = await findAllCategories();
+      setCategories(response);
+    //   setCategories([{
+    //     id: 1,
+    //     name: 'category 1',
+    //     description: 'desc category 1'
+    //   },
+    //   {
+    //     id: 2,
+    //     name: 'category 2',
+    //     description: 'desc category 2'
+    //   },
+    //   {
+    //     id: 3,
+    //     name: 'category 3',
+    //     description: 'desc category 3'
+    //   },
+    // ]);
     }
     
     useEffect(() => {
@@ -66,8 +67,11 @@ const TableCategoryComponent = ({ }) => {
          setCategoryDialog(true);
      };
  
-     const hideDialog = (submitted: boolean = false) => {
+     const hideDialog = async (submitted: boolean = false) => {
          setCategoryDialog(false);
+         if(submitted){
+            await initComponent();
+         }
      };
  
      const startToolbarTemplate = () => {
@@ -122,17 +126,14 @@ const TableCategoryComponent = ({ }) => {
         </div>
 
         <Dialog visible={categoryDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Categories Operation" modal className="p-fluid" onHide={hideDialog}>
-            {action}
-            {categoryDialog && (<div></div>)}
-            {categoryDialog ? (<div></div>) : (<div></div>)}
             {(() => {
                 switch(action){
                     case Action.CREATE:
                     case Action.UPDATE:
-                            return <FormCategoryComponent category={category} action={action} hideDialog={hideDialog}/>
+                            return <FormCategoryComponent category={category} action={action} hideDialog={hideDialog} toast={toast} />
                     case Action.DELETE:
                     case Action.VIEW:
-                           return <ViewCategoryComponent category={category} action={action} hideDialog={hideDialog}/>
+                           return <ViewCategoryComponent category={category} action={action} hideDialog={hideDialog} toast={toast}/>
                     default: 
                         return <div>Operation dont allowed</div>
                 }

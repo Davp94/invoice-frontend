@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from "js-cookie";
 
 const instance = axios.create({
   baseURL: 'http://74.208.201.97:3000',
@@ -6,8 +7,10 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(config => {
-  console.log('🚀 ~ config:', config);
-  //TODO VALIDATION LOGIC
+  const token = Cookies.get('token');
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
   return config;
 });
 

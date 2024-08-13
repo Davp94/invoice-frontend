@@ -7,10 +7,16 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const path = request.nextUrl.pathname;
 
-  if( !token && path != '/auth/login'){
+  if( !token && path !== '/auth/login'){
     url.pathname = '/auth/login'
+    return NextResponse.redirect(url);
   }
-  return NextResponse.redirect(url);
+
+  if (token && path === '/auth/login') {
+    url.pathname = '/';
+    return NextResponse.redirect(url);
+  }
+
 }
  
 // See "Matching Paths" below to learn more

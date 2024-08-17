@@ -1,9 +1,9 @@
 'use client';
 
-import { findAllProducts } from "../service/product.service";
+import { findAllProducts, findAllProductsPagination } from "../service/product.service";
 import React, { useState, useEffect, useRef } from 'react';
 import { classNames } from 'primereact/utils';
-import { DataTable } from 'primereact/datatable';
+import { DataTable, DataTableFilterEvent, DataTablePageEvent, DataTableSortEvent } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
@@ -20,6 +20,8 @@ import { InputText } from 'primereact/inputtext';
 import { Tag } from 'primereact/tag';
 import { ProductDto } from "../method/product.dto";
 import { Action } from "@/common/enum/action.enum";
+import { PaginationSortingDto } from "@/common/dto/pagination-sorting.dto";
+import { Order } from "@/common/enum/order.enum";
 // import FormProductComponent from "./form-product.component";
 let emptyProduct: ProductDto = {
     pro_id: 0,
@@ -33,14 +35,15 @@ let emptyProduct: ProductDto = {
 const TableProductComponent = ({ }) => {
     const [products, setProducts] = useState<ProductDto[]>();
     const [action, setAction] = useState<number>(0);
+    const [metadata, setMetadata] = useState({total: 0, pages: 0});
     const [productDialog, setProductDialog] = useState<boolean>(false);
     const [product, setProduct] = useState<ProductDto>(emptyProduct);
     const [globalFilter, setGlobalFilter] = useState<string>('');
     const [lazyState, setlazyState] = useState<LazyTableState>({
         first: 0,
-        rows: 10,
-        page: 1,
-        sortField: '',
+        rows: 2,
+        page: 0,
+        sortField: 'pro_id',
         sortOrder: 0,
     });
     const toast = useRef<Toast>(null);
@@ -49,15 +52,16 @@ const TableProductComponent = ({ }) => {
       setProducts(response);
     }
 
-    const loadLazyData = () => {
-
-        //imitate delay of a backend call
-        networkTimeout = setTimeout(() => {
-            CustomerService.getCustomers({ lazyEvent: JSON.stringify(lazyState) }).then((data) => {
-                setTotalRecords(data.totalRecords);
-                setProducts(products);
-            });
-        }, Math.random() * 1000 + 250);
+    const loadLazyData = async () => {
+        const productsPagination: PaginationSortingDto = {
+            take: lazyState.rows,
+            page: lazyState.page,
+            sortDirection: lazyState.sortOrder == 0 ? Order.ASC: Order.DESC,
+            sortParam: lazyState.sortField,
+        }
+        const data  = await findAllProductsPagination(productsPagination);
+        setProducts(data?.content);
+        setMetadata(data?.metadata);
     };
 
     const onPage = (event: DataTablePageEvent) => {
@@ -129,8 +133,10 @@ const TableProductComponent = ({ }) => {
         <div className="card">
             <Toolbar className="mb-4" start={startToolbarTemplate} end={endToolbarTemplate}></Toolbar>
 
-            <DataTable value={products}
-                    dataKey="id"  paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
+            <DataTable value={products} lazy
+                    dataKey="id"  paginator rows={2} rowsPerPageOptions={[2, 5, 10, 25]}
+                    first={lazyState.first} totalRecords={metadata?.total} onSort={onSort} sortField={lazyState.sortField}
+                    sortOrder={lazyState.sortOrder} onFilter={onFilter} onPage={onPage} 
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} categories" globalFilter={globalFilter} header={header}
             >

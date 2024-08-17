@@ -7,5 +7,5 @@ export interface PaginationSortingDto {
 
   sortDirection: Order;
 
-  sortParam: string;
+  sortParam: string | undefined;
 }

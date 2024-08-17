@@ -8,6 +8,9 @@ export default function Home() {
   const router = useRouter();
   return (
     <>
+      <div className="w-full flex justify-content-center">
+      <img src="http://74.208.201.97:3000/uploads/nest-1723770568489_790749583.png" width={800} height={300} alt="Nest banner"/>
+      </div>
       <Button label="Exit" icon="pi pi-check"  severity="warning" onClick={() => {
         Cookies.remove("token")
         router.push("/auth/login")}

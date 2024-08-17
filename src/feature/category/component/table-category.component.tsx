@@ -1,6 +1,6 @@
 'use client';
 
-import { findAllCategories } from "../service/category.service";
+import { findAllCategories, reportCategories } from "../service/category.service";
 import React, { useState, useEffect, useRef } from 'react';
 import { classNames } from 'primereact/utils';
 import { DataTable } from 'primereact/datatable';
@@ -83,7 +83,7 @@ const TableCategoryComponent = ({ }) => {
      };
  
      const endToolbarTemplate = () => {
-         return <Button label="Export" icon="pi pi-upload" className="p-button-help" onClick={() => alert('exporting file')} />;
+         return <Button label="Export" icon="pi pi-upload" className="p-button-help" onClick={() => downloadFile()} />;
      };
  
  
@@ -106,6 +106,14 @@ const TableCategoryComponent = ({ }) => {
              </IconField>
          </div>
      );
+
+     const downloadFile = () => {
+        reportCategories().then(res => {
+            const url = window.URL.createObjectURL(res);
+            window.open(url);
+            window.URL.revokeObjectURL(url);
+        })
+     }
   
     return (
         <div>
@@ -124,7 +132,7 @@ const TableCategoryComponent = ({ }) => {
                 <Column header="Action" body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column>
             </DataTable>
         </div>
-
+        {/* <embed src="blob:http://74.208.201.97:3100/535db5e6-1929-43f0-8a2a-eed947c9fa07" width={500} height={500} type="application/pdf" /> */}
         <Dialog visible={categoryDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Categories Operation" modal className="p-fluid" onHide={hideDialog}>
             {(() => {
                 switch(action){

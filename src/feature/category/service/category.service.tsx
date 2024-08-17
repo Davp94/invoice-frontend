@@ -46,3 +46,11 @@ export const deleteCategory = async (id: number) => {
         }
     )
 }
+
+export const reportCategories = async () => {
+    return await http.get('/category/pdf/report', {responseType: 'blob'}).then(
+        res => {
+            return res;
+        }
+    )
+}

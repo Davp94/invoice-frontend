@@ -45,7 +45,7 @@ const AuthComponent = ({}) => {
             className="mb-3"
           /> */}
             <div className="text-900 text-3xl font-medium mb-3">Invoice App</div>
-            <span className="text-600 font-medium line-height-3">Don't have an account?</span>
+            <span className="text-600 font-medium line-height-3">Do not have an account?</span>
             <a className="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a>
           </div>
 

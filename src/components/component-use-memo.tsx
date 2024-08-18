@@ -5,7 +5,11 @@ import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-export default function ComponentUseMemo({ data, setData }) {
+export interface UseMemoProps{
+  data: any,
+  setData: any,
+}
+export default function ComponentUseMemo<UseMemoProps>({ data, setData }) {
   //const hookTitle = 'WELCOME HOOKS PAGE';
 
   const hardCalculate = useMemo(()=>{
@@ -15,9 +19,9 @@ export default function ComponentUseMemo({ data, setData }) {
     return total;
   }, [data])
 
-  const handleData = useCallback(() => {
-    console.log('executing this')
-  },[setData])
+  // const handleData = useCallback(() => {
+  //   console.log('executing this')
+  // },[setData])
   //USE EFFECT
 
   // useEffect(() => {

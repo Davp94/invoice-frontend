@@ -15,7 +15,7 @@ export default function HooksPage() {
   //const hookCOndition = false;
   const router = useRouter();
   //useRef
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const onButtonClick = () => {
     console.log('focusing input');
